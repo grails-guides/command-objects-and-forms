@@ -1,0 +1,31 @@
+Before we can create any actions using command objects, we need a controller. Create a
+`PlayerController` class to work with the existing domain object `Player`.
+
+[source,groovy]
+----
+$ ./grailsw create-controller demo.Player
+----
+
+NOTE: The first time you run a `grails` command, application dependencies will be
+downloaded form the Internet. Subsequent calls will be much faster.
+
+The output of the command will look like:
+
+----
+| Created grails-app/controllers/demo/PlayerController.groovy
+| Created src/test/groovy/demo/PlayerControllerSpec.groovy
+----
+
+You will now have a new, mostly empty controller named `PlayerController.groovy`
+in the `grails-app/controllers/demo` directory. Update the `index` action to look
+like this:
+
+[source,groovy]
+----
+include::{sourceDir}/grails-app/controllers/demo/PlayerController.groovy[tags=actionIndex]
+----
+
+The domain class, views, and some sample data are provided for you. At this point,
+you should be able to run the application to see a list of players. Note, however,
+that none of the other actions (e.g. new player, show player, etc.) will work yet,
+not until we write those actions.

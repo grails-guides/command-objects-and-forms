@@ -2,7 +2,11 @@ gettingStarted:
   title: Getting Started
   requirements: What you will need
   howto: How to complete the guide
+whatAreCommandObjects: What are command objects?
 writingTheApp:
   title: Writing the Application
+  createTheController: Create the controller
+  addCreateAndSaveActions: Implement the create and save actions
+
 runningTheApp:
   title: Running the Application
