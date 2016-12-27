@@ -1,7 +1,6 @@
 package demo
 
 class Player {
-
     String name
     String game
     String region
@@ -15,5 +14,4 @@ class Player {
         wins min: 0
         losses min: 0
     }
-
 }

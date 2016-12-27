@@ -1,0 +1,134 @@
+Next, let's add the ability to create new players. To `PlayerController`, add the `create`
+action.
+
+[source,groovy]
+----
+include::{sourceDir}/grails-app/controllers/demo/PlayerController.groovy[tags=create]
+----
+
+While this action does make use of the `Player` class, `player` *is not* a command object
+since it is not an argument to the action. This should make sense: since the intent of the
+action is to create a new player object, there is no form or input handling necessary.
+
+From the Player List (http://localhost:8080/player/index), click the "New Player"
+to see the form to create a new player (located at http://localhost:8080/player/create).
+If you were enter values into the form and click the "Create" button now, you would get
+a `404 Page Not Found` error, since the `save` action is not defined yet.
+Add that now to `PlayerController`.
+
+[source,groovy]
+----
+    def save(Player player) {
+        // Your code here...
+    }
+----
+
+Here, `player` *is* a command object, because it is an argument to the action. Behind
+the scenes, Grails will recognize this and rewrite your action to fetch existing records
+(if necessary), bind input data to the command object, perform dependency injection, and
+validate the object. All of these tasks could be done manually, but by making use of a
+command object, you get all of this boilerplate behavior for free.
+
+Arguably, the best feature here is http://docs.grails.org/latest/guide/theWebLayer.html#dataBinding[Data Binding],
+part of the automatic behavior you get from using command objects. Note the following
+HTML form (generated from the compiled `create.gsp`):
+
+[source,html]
+----
+<form action="/player/save" method="post" >
+    <fieldset class="form">
+        <div class='fieldcontain required'>
+          <label for='name'>Name<span class='required-indicator'>*</span></label>
+          <input type="text" name="name" value="" required="" id="name" />
+        </div>
+        <div class='fieldcontain required'>
+          <label for='game'>Game<span class='required-indicator'>*</span></label>
+          <input type="text" name="game" value="" required="" id="game" />
+        </div>
+        <div class='fieldcontain'>
+          <label for='region'>Region</label>
+          <input type="text" name="region" value="" id="region" />
+        </div>
+        <div class='fieldcontain required'>
+          <label for='wins'>Wins<span class='required-indicator'>*</span></label>
+          <input type="number" name="wins" value="0" required="" min="0" id="wins" />
+        </div>
+        <div class='fieldcontain required'>
+          <label for='losses'>Losses<span class='required-indicator'>*</span></label>
+          <input type="number" name="losses" value="0" required="" min="0" id="losses" />
+        </div>
+    </fieldset>
+    <fieldset class="buttons">
+        <input type="submit" name="create" class="save" value="Create" id="create" />
+    </fieldset>
+</form>
+----
+
+The `<input>` tag names match exactly the properties of the domain class `Player`.
+
+[source,groovy]
+----
+include::{sourceDir}/grails-app/domain/demo/Player.groovy[]
+----
+
+Data binding will take the form-submitted string values for `name`, `game`, and `region`
+(if set) and set those properties in your command object `player`. The form-submitted
+string values for `wins` and `losses` will also be set in `player` after automatic
+type-conversion to `*int*`.
+
+After binding, data validation will be done; as this is a domain class, any constraints
+set in the class's `constraits` block will be checked. This gives us the opportunity to
+add simple error-checking. Update the `save` action of `PlayerController`.
+
+[source,groovy]
+----
+include::{sourceDir}/grails-app/controllers/demo/PlayerController.groovy[tags=save;save-handleErrors]
+----
+
+While the existing, generated `gsp` files include some Javascript to do as much client-side
+form validation as possible, we can see the Grails server-side validation and error checking
+by using `curl`. Type on the command line while the Grails application is running:
+
+[source,]
+----
+$ curl --request POST --form "name=Bob Smith" --form "wins=42" --form "losses=abc" "http://localhost:8080/player/save.json"
+----
+
+You should see the following response (formatted nicely here):
+
+[source]
+----
+{"errors": [
+        {"object": "demo.Player",
+         "field": "losses",
+         "rejected-value": "abc",
+         "message": "Property losses is type-mismatched"},
+
+        {"object": "demo.Player",
+         "field": "game",
+         "rejected-value": null,
+         "message": "Property [game] of class [class demo.Player] cannot be null"}
+]}
+----
+
+Now that data binding, validation, and error-checking is done, update the `save` action
+to actually save the object and respond to the form submission. This completes the action.
+
+[source,groovy]
+----
+include::{sourceDir}/grails-app/controllers/demo/PlayerController.groovy[tags=save-full]
+----
+
+You should now be able to successfully create and save new players to the database.
+
+[NOTE]
+====
+The example controller code presented here for `save` and other actions in this guide is
+kept intentionally simple in order to focus on command objects. You will most likely want
+additional functionality in your actions. When building your own controllers, a good
+starting point is to generate your initial controller with this command:
+
+----
+./grailsw generate-controller demo.Player
+----
+====

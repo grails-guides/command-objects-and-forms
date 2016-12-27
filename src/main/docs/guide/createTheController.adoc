@@ -17,15 +17,16 @@ The output of the command will look like:
 ----
 
 You will now have a new, mostly empty controller named `PlayerController.groovy`
-in the `grails-app/controllers/demo` directory. Update the `index` action to look
-like this:
+in the `grails-app/controllers/demo` directory. Update the `index` action and add
+the `show` action to look like this:
 
 [source,groovy]
 ----
-include::{sourceDir}/grails-app/controllers/demo/PlayerController.groovy[tags=actionIndex]
+include::{sourceDir}/grails-app/controllers/demo/PlayerController.groovy[tags=indexShow]
 ----
 
 The domain class, views, and some sample data are provided for you. At this point,
-you should be able to run the application to see a list of players. Note, however,
-that none of the other actions (e.g. new player, show player, etc.) will work yet,
-not until we write those actions.
+you should be able to run the application and navigate to http://localhost:8080/player/
+to see a list of players, and click on a player's name to view that individual player.
+However, none of the other actions (e.g. create, save, edit, update, delete) will work yet,
+not until you write those actions.
