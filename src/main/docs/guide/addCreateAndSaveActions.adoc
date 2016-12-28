@@ -89,7 +89,7 @@ While the existing, generated `gsp` files include some Javascript to do as much 
 form validation as possible, we can see the Grails server-side validation and error checking
 by using `curl`. Type on the command line while the Grails application is running:
 
-[source,]
+[source]
 ----
 $ curl --request POST --form "name=Bob Smith" --form "wins=42" --form "losses=abc" "http://localhost:8080/player/save.json"
 ----
