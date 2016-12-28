@@ -36,11 +36,61 @@ class PlayerController {
         //end::save-handleErrors[]
 
         player.save flush: true
-        respond player, [status: HttpStatus.CREATED]
+
+        request.withFormat {
+            form multipartForm { redirect player }
+            '*' { respond player, status: HttpStatus.CREATED }
+        }
         //tag::save[]
     }
     //end::save[]
     //end::save-full[]
+
+    def edit(Player player) {
+        respond player
+    }
+
+    //tag::update[]
+    def update(PlayerInfo info) {
+        if (info.hasErrors()) {
+            respond info.errors, view: 'edit'
+            return
+        }
+
+        Player player = Player.get(params.id)
+        if (player == null) {
+            render status: HttpStatus.NOT_FOUND
+            return
+        }
+
+        player.properties = info.properties
+        player.save flush: true
+
+        request.withFormat {
+            form multipartForm { redirect player }
+            '*' { respond player, status: HttpStatus.OK }
+        }
+    }
+    //end::update[]
+
 //tag::indexShow[]
 }
 //end::indexShow[]
+
+//tag::playerInfo[]
+class PlayerInfo {
+    String name
+    String game
+    String region
+//end::playerInfo[]
+    //tag::playerInfo-constraints[]
+
+    static constraints = {
+        name blank: false
+        game blank: false
+        region nullable: true
+    }
+    //end::playerInfo-constraints[]
+//tag::playerInfo[]
+}
+//end::playerInfo[]

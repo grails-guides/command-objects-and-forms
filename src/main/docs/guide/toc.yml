@@ -7,6 +7,6 @@ writingTheApp:
   title: Writing the Application
   createTheController: Create the controller
   addCreateAndSaveActions: Implement the create and save actions
-
+  addEditAndUpdateActions: Implement the edit and update actions
 runningTheApp:
   title: Running the Application
