@@ -29,25 +29,22 @@ and `save` actions.
 ----
 
 The `edit` action starts with a `Player` command object; Grails fetches an existing `Player`
-object automatically for you, and the properties of that object are loaded as the
-initial values of the form in `edit.gsp`.
+object automatically, and the properties of that object are loaded as the initial values of
+the form in `edit.gsp`. The `update` action is the same as `save`, except that errors redirect
+back to `edit` rather than `create`, and the HTTP status for success is `OK` rather than `CREATED`.
 
-The `update` action is the same as `save`, except that errors redirect back to `edit`
-rather than `create`, and the HTTP status for success is `OK` rather than `CREATED`.
-
-Let's change the `update` action a bit. Assuming a player's win and loss counts will be
-managed elsewhere, the wins and losses inputs have been removed from the form in `edit.gsp`.
+On the assumption that a player's win and loss counts will be managed elsewhere, the wins
+and losses fields have already been removed from the form in `edit.gsp`.
 While running the application, go to the player list and click on one of the
-player names. While you can show the win/loss count, clicking the "Edit" button will
+player names. While you can show the win/loss count, clicking the *Edit* button will
 display a form that does not let you change the win/loss counts.
 
-But this isn't sufficient to protect those properties. Just because the inputs have been
-removed from the form *does not* prevent those fields from being changed. A clever user
-can submit the form by other means that will change those values:
+But this isn't sufficient: removing input fields from the form *does not prevent* those fields
+from being changed. A clever user can submit the form by other means that will change those values.
 
 [source]
 ----
-$ curl --request GET "http://localhost:8080/player/show.json?id=1"
+$ curl --request GET "http://localhost:8080/player/show/1.json"
 
 {"id":1, "game":"Pandemic", "losses":30, "name":"Alexis Barnett", "region":"EAST", "wins":96}
 
@@ -57,22 +54,23 @@ $ curl --request POST --form "id=1" --form "wins=2" --form "losses=194" "http://
 After the second `curl` command, player Alexis Barnett will have only two wins and 194 losses,
 rather than the 96 wins and 30 losses she should have.
 
-One way to fix this would be to avoid the use of the `Player` command object and manage all
-of the loading, binding, and verification manually. Then you could ignore any attempts to
-modify the wins and losses properties.
+One way to fix this would be to avoid the use of the `Player` command object (so as to avoid
+automatic filling of properties) and instead manage all of the loading, binding, and verification
+manually. You could customize the action's behavior and ignore any attempts to modify the wins
+and losses properties.
 
-But command objects do not require using a domain class: use any class! Define the following
-class in `PlayerController.groovy` below the `PlayerController` class. Notice that the
-property names of `PlayerInfo` match those of the form's `<input>` tags; submitted form values
-will be bound to the command object's properties where the names match.
+But command objects are not required to be a domain class: use any class! Define the following
+class in `PlayerController.groovy` below the `PlayerController` class. Note that the property
+names of `PlayerInfo` match those of the form's `<input>` tags; when the form is submitted,
+form values will be bound to the command object's properties where the names match.
 
 [source,groovy]
 ----
 include::{sourceDir}/grails-app/controllers/demo/PlayerController.groovy[tags=playerInfo]
 ----
 
-And change the `update` action to use `PlayerInfo` as the command object, using its content
-to update the appropriate `Player` instance.
+Change the `update` action to use `PlayerInfo` as the command object. Load the appropriate
+`Player` instance, then update and save it using the command object's properties.
 
 [source,groovy]
 ----
@@ -103,26 +101,25 @@ accepted from the form submission, even if values are submitted for those names.
 
 [source]
 ----
-$ curl --request GET "http://localhost:8080/player/show.json?id=4"
+$ curl --request GET "http://localhost:8080/player/show/4.json"
 
 {"id":4, "name":"Catherine Newton", "game":"Scythe", "region":"WEST", "wins":66, "losses":40}
 
 $ curl --request POST --form "id=4" --form "name=June Smith" --form "game=Chess" --form "region=NORTH" --form "wins=0" --form "losses=10" "http://localhost:8080/player/update.json"
 
-$ curl --request GET "http://localhost:8080/player/show.json?id=4"
+$ curl --request GET "http://localhost:8080/player/show/4.json"
 
 {"id":4, "name":"June Smith", "game":"Chess", "region":"NORTH", "wins":66, "losses":40}
 ----
 
-As you can see, the `name`, `game`, and `region` properties have all changed, while the
-`wins` and `losses` properties have not changed despite our efforts to do so. By using the
+Note that the `name`, `game`, and `region` properties have all updated, but the `wins` and
+`losses` properties have not changed despite our efforts to do so. By using the
 `PlayerInfo` command object, we've restricted what fields are accepted from the form
-submission while still maintaining all the benefits of command objects.
+submission.
 
-One thing this current solution is missing is validation. While `Player` will still be
-validated when `player.save` is called, that now happens later in the action, after the
-attempt to save. It would be better if the error check happened earlier, as it did in the
-`save` action and the first version of `update`.
+The current solution is lacking, though. Because `PlayerInfo` is now the command object and
+not `Player`, validation is not done until the call to `player.save`. It would be better if
+validation was done earlier, as it had been done when `Player` was the command object.
 
 To resolve this, add a `constraints` block to `PlayerInfo`. When you defined the command
 object class `PlayerInfo` in the `PlayerController.groovy` file, Grails recognized it as
@@ -134,9 +131,33 @@ and add constraints.
 include::{sourceDir}/grails-app/controllers/demo/PlayerController.groovy[tags=playerInfo;playerInfo-constraints]
 ----
 
-Now revise the `update` action once more, putting error checking back near the top.
+Revise the `update` action once more, returning error checking prior to the attempt to save.
 
 [source,groovy]
 ----
 include::{sourceDir}/grails-app/controllers/demo/PlayerController.groovy[tags=update]
 ----
+
+Command object classes can be defined elsewhere (for example, under the `src/` folder hierarchy).
+They need not be in the same file as the controller using them. This might be useful to maintain
+a separation of concerns, or simply to make a command object class available to multiple controllers.
+ 
+If your command object class is defined in the same source file as the controller using it, Grails
+will automatically make it `Validateable`, permitting the use of a static `constraints` block. If
+you define the class elsewhere and need `constraints`, you need to add an `implements` clause.
+
+[source,groovy]
+----
+class PlayerInfo implements grails.validation.Validateable {
+    String name
+    String game
+    String region
+
+    static constraints = {
+        name blank: false
+        game blank: false
+        region nullable: true
+    }
+}
+----
+

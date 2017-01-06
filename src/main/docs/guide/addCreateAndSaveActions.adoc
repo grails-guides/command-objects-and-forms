@@ -10,16 +10,16 @@ While this action does make use of the `Player` class, `player` *is not* a comma
 since it is not an argument to the action. This should make sense: since the intent of the
 action is to create a new player object, there is no form or input handling necessary.
 
-From the Player List (http://localhost:8080/player/index), click the "New Player"
+From the Player List (http://localhost:8080/player/index), click the *New Player* button
 to see the form to create a new player (located at http://localhost:8080/player/create).
-If you were enter values into the form and click the "Create" button now, you would get
+If you were enter values into the form and click the *Create* button now, you would get
 a `404 Page Not Found` error, since the `save` action is not defined yet.
 Add that now to `PlayerController`.
 
 [source,groovy]
 ----
     def save(Player player) {
-        // Your code here...
+        // ...
     }
 ----
 
@@ -27,11 +27,13 @@ Here, `player` *is* a command object, because it is an argument to the action. B
 the scenes, Grails will recognize this and rewrite your action to fetch existing records
 (if necessary), bind input data to the command object, perform dependency injection, and
 validate the object. All of these tasks could be done manually, but by making use of a
-command object, you get all of this boilerplate behavior for free.
+command object, all of this behavior is automatic and leaves your code uncluttered of so
+much boilerplate.
 
 Arguably, the best feature here is http://docs.grails.org/latest/guide/theWebLayer.html#dataBinding[Data Binding],
-part of the automatic behavior you get from using command objects. Note the following
-HTML form (generated from the compiled `create.gsp`):
+part of the automatic behavior you get from using command objects. While on the create
+page, view the HTML source code (generated from the compiled `create.gsp`) and look for
+the `<form>` tag:
 
 [source,html]
 ----
@@ -74,27 +76,37 @@ include::{sourceDir}/grails-app/domain/demo/Player.groovy[]
 Data binding will take the form-submitted string values for `name`, `game`, and `region`
 (if set) and set those properties in your command object `player`. The form-submitted
 string values for `wins` and `losses` will also be set in `player` after automatic
-type-conversion to `*int*`.
+type-conversion to `*int*`. The convention of using the same name for domain class properties
+and input fields greatly simplifies coding and application development: view fields are
+pre-filled with values from domain class objects, and command objects are filled with
+submitted form data, requiring very little developer effort.
 
 After binding, data validation will be done; as this is a domain class, any constraints
 set in the class's `constraits` block will be checked. This gives us the opportunity to
-add simple error-checking. Update the `save` action of `PlayerController`.
+add simple error-checking. Near the top of `PlayerController.groovy`, add:
+
+[source,groovy]
+----
+import org.springframework.http.HttpStatus
+----
+
+Then update the `save` action of `PlayerController`.
 
 [source,groovy]
 ----
 include::{sourceDir}/grails-app/controllers/demo/PlayerController.groovy[tags=save;save-handleErrors]
 ----
 
-While the existing, generated `gsp` files include some Javascript to do as much client-side
-form validation as possible, we can see the Grails server-side validation and error checking
-by using `curl`. Type on the command line while the Grails application is running:
+The existing, generated `gsp` files include Javascript to do as much client-side form
+validation as possible. To see the Grails server-side validation and error checking, try
+using `curl`. On the command line (while the Grails application is running), type:
 
 [source]
 ----
 $ curl --request POST --form "name=Bob Smith" --form "wins=42" --form "losses=abc" "http://localhost:8080/player/save.json"
 ----
 
-You should see the following response (formatted nicely here):
+You should receive the following response (displayed nicely here):
 
 [source]
 ----
@@ -126,7 +138,8 @@ You should now be able to successfully create and save new players to the databa
 The example controller code presented here for `save` and other actions in this guide is
 kept intentionally simple in order to focus on command objects. You will most likely want
 additional functionality in your actions. When building your own controllers, a good
-starting point is to generate your initial controller with this command:
+starting point is to generate your initial controller with the Grails `generate-controller`
+script:
 
 ----
 ./grailsw generate-controller demo.Player
