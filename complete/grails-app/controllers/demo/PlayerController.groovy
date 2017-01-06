@@ -52,14 +52,14 @@ class PlayerController {
 
     //tag::update[]
     def update(PlayerInfo info) {
-        if (info.hasErrors()) {
-            respond info.errors, view: 'edit'
-            return
-        }
-
         Player player = Player.get(params.id)
         if (player == null) {
             render status: HttpStatus.NOT_FOUND
+            return
+        }
+
+        if (info.hasErrors()) {
+            respond info.errors, view: 'edit'
             return
         }
 
