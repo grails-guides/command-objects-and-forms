@@ -8,7 +8,7 @@ class Player {
     int losses = 0
 
     static constraints = {
-        name blank: false, unqiue: true
+        name blank: false, unique: true
         game blank: false
         region nullable: true
         wins min: 0
