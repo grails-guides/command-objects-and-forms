@@ -6,8 +6,7 @@ Before we can create any actions using command objects, we need a controller. Cr
 $ ./grailsw create-controller demo.Player
 ----
 
-NOTE: The first time you run a `grails` command, application dependencies will be
-downloaded form the Internet. Subsequent calls will be much faster.
+include::{commondir}/common-firstTimeYouRunGrailsCommand.adoc[]
 
 The output of the command will look like:
 
@@ -32,12 +31,4 @@ to see a list of players, and click on a player's name to view that individual p
 However, none of the other actions (e.g. create, save, edit, update, delete) will work yet,
 not until you write those actions.
 
-[NOTE]
-====
-At any point, you can start the application by typing `./gradlew bootRun` on the
-command line; it is running and ready when you see:
-
-    Grails application running at http://localhost:8080 in environment: development
-
-Stop the application by pressing *Ctrl-C*.
-====
+include::{commondir}/common-startTheApplication.adoc[]
