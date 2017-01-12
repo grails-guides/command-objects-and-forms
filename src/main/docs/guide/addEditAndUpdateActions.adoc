@@ -143,10 +143,10 @@ include::{sourceDir}/grails-app/controllers/demo/PlayerController.groovy[tags=up
 Command object classes can be defined elsewhere (for example, under the `src/` folder hierarchy).
 They need not be in the same file as the controller using them. This might be useful to maintain
 a separation of concerns, or simply to make a command object class available to multiple controllers.
- 
-If your command object class is defined in the same source file as the controller using it, Grails
+
+**If your command object class is defined in the same source file as the controller using it, Grails
 will automatically make it `Validateable`, permitting the use of a static `constraints` block. If
-you define the class elsewhere and need `constraints`, you need to add an `implements` clause.
+you define the class elsewhere and need `constraints`, you need to add an `implements` clause** as displayed next:
 
 [source,groovy]
 ----
@@ -162,4 +162,3 @@ class PlayerInfo implements grails.validation.Validateable {
     }
 }
 ----
-
