@@ -7,7 +7,7 @@ action.
 include::{sourceDir}/grails-app/controllers/demo/PlayerController.groovy[tags=create]
 ----
 
-While this action does make use of the `Player` class, `player` *is not* a command object
+While this action does make use of the `Player` class, the instance of `Player` *is not* a command object
 since it is not an argument to the action. This should make sense: since the intent of the
 action is to create a new player object, there is no form or input handling necessary.
 
