@@ -2,6 +2,7 @@ Next, let's add the ability to create new players. To `PlayerController`, add th
 action.
 
 [source,groovy]
+./grails-app/controllers/demo/PlayerController.groovy
 ----
 include::{sourceDir}/grails-app/controllers/demo/PlayerController.groovy[tags=create]
 ----
@@ -69,6 +70,7 @@ the `<form>` tag:
 The `<input>` tag names match exactly the properties of the domain class `Player`.
 
 [source,groovy]
+./grails-app/domain/demo/Player.groovy
 ----
 include::{sourceDir}/grails-app/domain/demo/Player.groovy[]
 ----
@@ -93,6 +95,7 @@ import org.springframework.http.HttpStatus
 Then update the `save` action of `PlayerController`.
 
 [source,groovy]
+./grails-app/controllers/demo/PlayerController.groovy
 ----
 include::{sourceDir}/grails-app/controllers/demo/PlayerController.groovy[tags=save;save-handleErrors]
 ----

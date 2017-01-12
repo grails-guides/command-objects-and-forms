@@ -21,6 +21,7 @@ in the `grails-app/controllers/demo` directory. Update the `index` action and ad
 the `show` action to look like this:
 
 [source,groovy]
+./grails-app/controllers/demo/PlayerController.groovy
 ----
 include::{sourceDir}/grails-app/controllers/demo/PlayerController.groovy[tags=indexShow]
 ----

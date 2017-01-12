@@ -127,6 +127,7 @@ a related command object class and made the class able to be validated. Change `
 and add constraints.
 
 [source,groovy]
+./grails-app/controllers/demo/PlayerController.groovy
 ----
 include::{sourceDir}/grails-app/controllers/demo/PlayerController.groovy[tags=playerInfo;playerInfo-constraints]
 ----
@@ -134,6 +135,7 @@ include::{sourceDir}/grails-app/controllers/demo/PlayerController.groovy[tags=pl
 Revise the `update` action once more, returning error checking prior to the attempt to save.
 
 [source,groovy]
+./grails-app/controllers/demo/PlayerController.groovy
 ----
 include::{sourceDir}/grails-app/controllers/demo/PlayerController.groovy[tags=update]
 ----
