@@ -126,6 +126,12 @@ You should receive the following response (displayed nicely here):
 ]}
 ----
 
+We are going to verify this with a Functional Test.
+
+include::{commondir}/common-functionalTestsIntro.adoc[]
+
+include::{commondir}/common-dependencyRestClientBuilderGrailsPlugin.adoc[]
+
 We created the app with the web profile but it is easy to add the testCompile dependency to our build file. Add the next
 line to the dependencies block.
 
