@@ -2,11 +2,12 @@ Next, let's add the ability to create new players. To `PlayerController`, add th
 action.
 
 [source,groovy]
+./grails-app/controllers/demo/PlayerController.groovy
 ----
 include::{sourceDir}/grails-app/controllers/demo/PlayerController.groovy[tags=create]
 ----
 
-While this action does make use of the `Player` class, `player` *is not* a command object
+While this action does make use of the `Player` class, the instance of `Player` *is not* a command object
 since it is not an argument to the action. This should make sense: since the intent of the
 action is to create a new player object, there is no form or input handling necessary.
 
@@ -69,6 +70,7 @@ the `<form>` tag:
 The `<input>` tag names match exactly the properties of the domain class `Player`.
 
 [source,groovy]
+./grails-app/domain/demo/Player.groovy
 ----
 include::{sourceDir}/grails-app/domain/demo/Player.groovy[]
 ----
@@ -93,6 +95,7 @@ import org.springframework.http.HttpStatus
 Then update the `save` action of `PlayerController`.
 
 [source,groovy]
+./grails-app/controllers/demo/PlayerController.groovy
 ----
 include::{sourceDir}/grails-app/controllers/demo/PlayerController.groovy[tags=save;save-handleErrors]
 ----
@@ -122,6 +125,33 @@ You should receive the following response (displayed nicely here):
          "message": "Property [game] of class [class demo.Player] cannot be null"}
 ]}
 ----
+
+We are going to verify this with a Functional Test.
+
+include::{commondir}/common-functionalTestsIntro.adoc[]
+
+include::{commondir}/common-dependencyRestClientBuilderGrailsPlugin.adoc[]
+
+We created the app with the web profile but it is easy to add the testCompile dependency to our build file. Add the next
+line to the dependencies block.
+
+[source,groovy]
+./build.gradle
+----
+include::{sourceDir}/build.gradle[lines="56"]
+----
+
+[source,groovy]
+./src/integration-test/groovy/demo/demo/PlayerControllerSpec.groovy
+----
+include::{sourceDir}/src/integration-test/groovy/demo/PlayerControllerSpec.groovy[]
+----
+
+<1> This annotation ensures serverPort contains the random port where the grails application started
+<2> If your client accepts JSON it is always a good idea to set the Accept Http Header
+<3> If your are sending a JSON Payload, you should set the Content-Type Http Header to application/json
+<4> Since command object validation failed, the server returns the Http Status - 422 Unprocessable Entity
+
 
 Now that data binding, validation, and error-checking is done, update the `save` action
 to actually save the object and respond to the form submission. This completes the action.
