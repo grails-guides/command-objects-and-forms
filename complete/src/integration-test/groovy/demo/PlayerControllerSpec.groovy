@@ -8,15 +8,12 @@ import spock.lang.Specification
 @Integration
 class PlayerControllerSpec extends Specification {
 
-    @Value('${local.server.port}') // <1>
-    Integer serverPort
-
     def "test save validation"() {
         given:
         RestBuilder rest = new RestBuilder()
 
         when:
-        def resp = rest.post("http://localhost:${serverPort}/player/save") {
+        def resp = rest.post("http://localhost:${serverPort}/player/save") { // <1>
             header("Accept", "application/json") // <2>
             header("Content-Type", "application/json") // <3>
             json {

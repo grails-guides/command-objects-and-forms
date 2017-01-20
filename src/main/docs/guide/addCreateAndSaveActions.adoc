@@ -147,7 +147,7 @@ include::{sourceDir}/build.gradle[lines="56"]
 include::{sourceDir}/src/integration-test/groovy/demo/PlayerControllerSpec.groovy[]
 ----
 
-<1> This annotation ensures serverPort contains the random port where the grails application started
+<1> `serverPort` property is automatically injected. It contains the random port where the Grails application runs during the functional test.
 <2> If your client accepts JSON it is always a good idea to set the Accept Http Header
 <3> If your are sending a JSON Payload, you should set the Content-Type Http Header to application/json
 <4> Since command object validation failed, the server returns the Http Status - 422 Unprocessable Entity
