@@ -1,4 +1,4 @@
-package command.objects.and.forms
+package demo
 
 import demo.Player
 

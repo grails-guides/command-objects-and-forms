@@ -117,6 +117,17 @@ Note that the `name`, `game`, and `region` properties have all updated, but the 
 `PlayerInfo` command object, we've restricted what fields are accepted from the form
 submission.
 
+Create a Unit Test to validate this behaviour
+
+[source,groovy]
+./src/test/groovy/demo/PlayerControllerSpec.groovy
+----
+include::{sourceDir}/src/test/groovy/demo/PlayerControllerSpec.groovy[indent=0]
+----
+
+<1> Call a no argument version of the update method. Put the values in the `params` map. Databinding
+will map those values to the Command Object. This emulates what happens at runtime.
+
 The current solution is lacking, though. Because `PlayerInfo` is now the command object and
 not `Player`, validation is not done until the call to `player.save`. It would be better if
 validation was done earlier, as it had been done when `Player` was the command object.
@@ -131,6 +142,15 @@ and add constraints.
 ----
 include::{sourceDir}/grails-app/controllers/demo/PlayerController.groovy[tags=playerInfo;playerInfo-constraints]
 ----
+
+Create a unit test to validate the constraints defined in the command object.
+
+[source,groovy]
+./src/test/groovy/demo/PlayerInfoSpec.groovy
+----
+include::{sourceDir}/src/test/groovy/demo/PlayerInfoSpec.groovy[indent=0]
+----
+
 
 Revise the `update` action once more, returning error checking prior to the attempt to save.
 

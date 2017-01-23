@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Value
 import spock.lang.Specification
 
 @Integration
-class PlayerControllerSpec extends Specification {
+class PlayerControllerFuncSpec extends Specification {
 
     def "test save validation"() {
         given:
