@@ -144,7 +144,7 @@ include::{sourceDir}/build.gradle[lines="56"]
 [source,groovy]
 ./src/integration-test/groovy/demo/demo/PlayerControllerSpec.groovy
 ----
-include::{sourceDir}/src/integration-test/groovy/demo/PlayerControllerSpec.groovy[]
+include::{sourceDir}/src/integration-test/groovy/demo/PlayerControllerFuncSpec.groovy[]
 ----
 
 <1> `serverPort` property is automatically injected. It contains the random port where the Grails application runs during the functional test.
