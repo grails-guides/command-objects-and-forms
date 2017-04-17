@@ -138,7 +138,7 @@ line to the dependencies block.
 [source,groovy]
 ./build.gradle
 ----
-include::{sourceDir}/build.gradle[lines="56"]
+include::{sourceDir}/build.gradle[tags=restClientDep]
 ----
 
 [source,groovy]
