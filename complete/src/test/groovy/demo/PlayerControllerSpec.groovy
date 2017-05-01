@@ -4,18 +4,14 @@ import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 
+@SuppressWarnings(['MethodName', 'DuplicateListLiteral', 'DuplicateNumberLiteral'])
 @TestFor(PlayerController)
 @Mock([Player])
 class PlayerControllerSpec extends Specification {
 
     def "test update"() {
         when:
-        def  player = new Player(name: 'Sergio',
-                game: 'XCOM: Enemy Unkown',
-                region: 'Spain',
-                wins: 3,
-                losses: 2
-        )
+        def  player = new Player(name: 'Sergio', game: 'XCOM: Enemy Unkown', region: 'Spain', wins: 3, losses: 2)
         player.save()
         params.id = player.id
         params.name = 'Sergio del Amo'

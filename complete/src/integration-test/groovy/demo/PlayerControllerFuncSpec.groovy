@@ -2,20 +2,20 @@ package demo
 
 import grails.plugins.rest.client.RestBuilder
 import grails.test.mixin.integration.Integration
-import org.springframework.beans.factory.annotation.Value
 import spock.lang.Specification
 
+@SuppressWarnings(['LineLength', 'MethodName'])
 @Integration
 class PlayerControllerFuncSpec extends Specification {
 
-    def "test save validation"() {
+    def 'test save validation'() {
         given:
         RestBuilder rest = new RestBuilder()
 
         when:
         def resp = rest.post("http://localhost:${serverPort}/player/save") { // <1>
-            header("Accept", "application/json") // <2>
-            header("Content-Type", "application/json") // <3>
+            accept('application/json') // <2>
+            contentType('application/json') // <3>
             json {
                 name = 'Bob Smith'
                 wins = 42

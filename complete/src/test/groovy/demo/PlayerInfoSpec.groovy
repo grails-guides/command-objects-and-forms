@@ -2,6 +2,7 @@ package demo
 
 import spock.lang.Specification
 
+@SuppressWarnings(['MethodName', 'DuplicateListLiteral'])
 class PlayerInfoSpec extends Specification {
 
     def "test PlayerInfo.region can be null"() {

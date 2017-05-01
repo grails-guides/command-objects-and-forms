@@ -1,9 +1,10 @@
-//tag::indexShow[]
+// tag::indexShow[]
 package demo
 
 import org.springframework.http.HttpStatus
 
 class PlayerController {
+
     def index() {
         respond Player.list(params), model: [playerCount: Player.count()]
     }
@@ -11,9 +12,10 @@ class PlayerController {
     def show(Player player) {
         respond player
     }
-    //end::indexShow[]
+    // end::indexShow[]
 
     //tag::create[]
+    @SuppressWarnings(['FactoryMethodName', 'GrailsMassAssignment'])
     def create() {
         respond new Player(params)
     }
