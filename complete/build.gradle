@@ -26,7 +26,9 @@ repositories {
     maven { url "https://repo.grails.org/grails/core" }
 }
 
+// tag::restClientDep[]
 dependencies {
+// end::restClientDep[]
     compile "org.springframework.boot:spring-boot-starter-logging"
     compile "org.springframework.boot:spring-boot-autoconfigure"
     compile "org.grails:grails-core"
@@ -47,8 +49,10 @@ dependencies {
     testCompile "org.grails.plugins:geb"
     testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
     testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
+// tag::restClientDep[]
     testCompile "org.grails:grails-datastore-rest-client"
 }
+// end::restClientDep[]
 
 bootRun {
     jvmArgs = ['-Dspring.output.ansi.enabled=always']
