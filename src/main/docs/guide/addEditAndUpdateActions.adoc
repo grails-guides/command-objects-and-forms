@@ -66,7 +66,7 @@ form values will be bound to the command object's properties where the names mat
 
 [source,groovy]
 ----
-include::{sourceDir}/grails-app/controllers/demo/PlayerController.groovy[tags=playerInfo]
+include::{sourceDir}/grails-app/controllers/demo/PlayerController.groovy[tags=playerInfo, indent=0]
 ----
 
 Change the `update` action to use `PlayerInfo` as the command object. Load the appropriate
@@ -157,7 +157,7 @@ Revise the `update` action once more, returning error checking prior to the atte
 [source,groovy]
 ./grails-app/controllers/demo/PlayerController.groovy
 ----
-include::{sourceDir}/grails-app/controllers/demo/PlayerController.groovy[tags=update]
+include::{sourceDir}/grails-app/controllers/demo/PlayerController.groovy[tags=update, indent=0]
 ----
 
 Command object classes can be defined elsewhere (for example, under the `src/` folder hierarchy).

@@ -22,7 +22,7 @@ the `show` action to look like this:
 [source,groovy]
 ./grails-app/controllers/demo/PlayerController.groovy
 ----
-include::{sourceDir}/grails-app/controllers/demo/PlayerController.groovy[tags=indexShow]
+include::{sourceDir}/grails-app/controllers/demo/PlayerController.groovy[tags=indexShow, indent=0]
 ----
 
 The domain class, views, and some sample data are provided for you. At this point,
