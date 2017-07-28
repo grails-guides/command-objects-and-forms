@@ -1,8 +1,8 @@
 package demo
 
-import grails.plugins.rest.client.RestBuilder
-import grails.test.mixin.integration.Integration
 import spock.lang.Specification
+import grails.plugins.rest.client.RestBuilder
+import grails.testing.mixin.integration.Integration
 
 @SuppressWarnings(['LineLength', 'MethodName'])
 @Integration

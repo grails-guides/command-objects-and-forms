@@ -1,13 +1,11 @@
 package demo
 
-import grails.test.mixin.Mock
-import grails.test.mixin.TestFor
 import spock.lang.Specification
+import grails.testing.gorm.DomainUnitTest
+import grails.testing.web.controllers.ControllerUnitTest
 
 @SuppressWarnings(['MethodName', 'DuplicateListLiteral', 'DuplicateNumberLiteral'])
-@TestFor(PlayerController)
-@Mock([Player])
-class PlayerControllerSpec extends Specification {
+class PlayerControllerSpec extends Specification implements ControllerUnitTest<PlayerController>, DomainUnitTest<Player> {
 
     def "test update"() {
         when:
