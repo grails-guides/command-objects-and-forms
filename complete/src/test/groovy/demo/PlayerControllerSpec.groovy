@@ -4,7 +4,7 @@ import spock.lang.Specification
 import grails.testing.gorm.DomainUnitTest
 import grails.testing.web.controllers.ControllerUnitTest
 
-@SuppressWarnings(['MethodName', 'DuplicateListLiteral', 'DuplicateNumberLiteral'])
+@SuppressWarnings(['MethodName', 'DuplicateListLiteral', 'DuplicateNumberLiteral', 'LineLength'])
 class PlayerControllerSpec extends Specification implements ControllerUnitTest<PlayerController>, DomainUnitTest<Player> {
 
     def "test update"() {
