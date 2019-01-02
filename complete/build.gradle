@@ -27,8 +27,15 @@ repositories {
 }
 
 // tag::restClientDep[]
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
+
 dependencies {
-// end::restClientDep[]
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
     compile "org.grails:grails-core"
     compile "org.springframework.boot:spring-boot-starter-actuator"
     compile "org.springframework.boot:spring-boot-starter-tomcat"
