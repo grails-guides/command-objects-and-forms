@@ -63,7 +63,7 @@ dependencies {
     testCompile "org.grails:grails-gorm-testing-support"
     testCompile "org.grails:grails-web-testing-support"
 // tag::restClientDep[]
-    testCompile "org.grails:grails-datastore-rest-client"
+    testCompile "io.micronaut:micronaut-http-client:1.0.2"
 }
 // end::restClientDep[]
 
