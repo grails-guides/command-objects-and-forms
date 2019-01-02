@@ -25,7 +25,15 @@ repositories {
     maven { url "https://repo.grails.org/grails/core" }
 }
 
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
+
 dependencies {
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
     compile "org.grails:grails-core"
     compile "org.springframework.boot:spring-boot-starter-actuator"
     compile "org.springframework.boot:spring-boot-starter-tomcat"
