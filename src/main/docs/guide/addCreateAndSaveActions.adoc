@@ -13,7 +13,7 @@ action is to create a new player object, there is no form or input handling nece
 
 From the Player List (http://localhost:8080/player/index), click the *New Player* button
 to see the form to create a new player (located at http://localhost:8080/player/create).
-If you were enter values into the form and click the *Create* button now, you would get
+If you were to enter values into the form and click the *Create* button now, you would get
 a `404 Page Not Found` error, since the `save` action is not defined yet.
 Add that now to `PlayerController`.
 
