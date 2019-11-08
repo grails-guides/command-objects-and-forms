@@ -7,6 +7,7 @@ import grails.testing.web.controllers.ControllerUnitTest
 @SuppressWarnings(['MethodName', 'DuplicateListLiteral', 'DuplicateNumberLiteral', 'LineLength'])
 class PlayerControllerSpec extends Specification implements ControllerUnitTest<PlayerController>, DomainUnitTest<Player> {
 
+    @SuppressWarnings(['JUnitPublicNonTestMethod'])
     def "test update"() {
         when:
         def  player = new Player(name: 'Sergio', game: 'XCOM: Enemy Unkown', region: 'Spain', wins: 3, losses: 2)
