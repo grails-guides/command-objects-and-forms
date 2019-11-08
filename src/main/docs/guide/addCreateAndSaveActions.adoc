@@ -130,16 +130,7 @@ We are going to verify this with a Functional Test.
 
 include::{commondir}/common-functionalTestsIntro.adoc[]
 
-include::{commondir}/common-dependencyRestClientBuilderGrailsPlugin.adoc[]
-
-We created the app with the web profile but it is easy to add the testCompile dependency to our build file. Add the next
-line to the dependencies block.
-
-[source,groovy]
-./build.gradle
-----
-include::{sourceDir}/build.gradle[tags=restClientDep, indent=0]
-----
+include::{commondir}/common-dependencyMicronautHttpClient.adoc[]
 
 [source,groovy]
 ./src/integration-test/groovy/demo/demo/PlayerControllerSpec.groovy
@@ -148,9 +139,8 @@ include::{sourceDir}/src/integration-test/groovy/demo/PlayerControllerFuncSpec.g
 ----
 
 <1> `serverPort` property is automatically injected. It contains the random port where the Grails application runs during the functional test.
-<2> If your client accepts JSON it is always a good idea to set the Accept Http Header
-<3> If your are sending a JSON Payload, you should set the Content-Type Http Header to application/json
-<4> Since command object validation failed, the server returns the Http Status - 422 Unprocessable Entity
+<2> If your client accepts JSON it is always a good idea to set the Accept Http Header. You will receive a JSON response instead of the HTML page.
+<3> Since command object validation failed, the server returns the Http Status - 422 Unprocessable Entity
 
 
 Now that data binding, validation, and error-checking is done, update the `save` action
