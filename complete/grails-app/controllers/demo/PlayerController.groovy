@@ -1,8 +1,11 @@
 // tag::indexShow[]
 package demo
 
+import grails.gorm.transactions.ReadOnly
+import grails.gorm.transactions.Transactional
 import org.springframework.http.HttpStatus
 
+@ReadOnly
 class PlayerController {
 
     def index() {
@@ -23,6 +26,7 @@ class PlayerController {
 
     //tag::save-full[]
     //tag::save[]
+    @Transactional
     def save(Player player) {
         //end::save[]
         //tag::save-handleErrors[]
@@ -53,6 +57,7 @@ class PlayerController {
     }
 
     //tag::update[]
+    @Transactional
     def update(PlayerInfo info) {
         if (info.hasErrors()) {
             respond info.errors, view: 'edit'
