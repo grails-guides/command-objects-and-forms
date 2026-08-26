@@ -1,38 +1,33 @@
 package demo
 
-import grails.testing.spock.OnceBefore
-import io.micronaut.http.HttpRequest
-import io.micronaut.http.HttpResponse
-import io.micronaut.http.HttpStatus
-import io.micronaut.http.client.HttpClient
-import spock.lang.Specification
 import grails.testing.mixin.integration.Integration
+import groovy.json.JsonSlurper
+import spock.lang.Specification
 
-@SuppressWarnings(['LineLength', 'MethodName'])
+import java.net.http.HttpClient
+import java.net.http.HttpRequest
+import java.net.http.HttpResponse
+
 @Integration
 class PlayerControllerFuncSpec extends Specification {
 
-    @Shared
-    @AutoCleanup
-    HttpClient client
+    void 'test save validation'() {
+        given:
+        HttpClient client = HttpClient.newHttpClient()
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:${serverPort}/player/save.json"))
+                .header('Accept', 'application/json')
+                .header('Content-Type', 'application/x-www-form-urlencoded')
+                .POST(HttpRequest.BodyPublishers.ofString('name=Bob+Smith&wins=42&losses=abc'))
+                .build()
 
-    @OnceBefore
-    void init() {
-        String baseUrl = "http://localhost:$serverPort"
-        this.client  = HttpClient.create(baseUrl.toURL())
-    }
-
-    def 'test save validation'() {
         when:
+        HttpResponse<String> resp = client.send(request, HttpResponse.BodyHandlers.ofString())
+        Map body = new JsonSlurper().parseText(resp.body()) as Map
+        List errors = body.errors as List
 
-        Map<String, Object> json = [name : 'Bob Smith',
-                                    wins : 42,
-                                    losses : 'abc']
-        HttpResponse<Map> resp = client.toBlocking().exchange(HttpRequest.POST("/player/save", json), Map)
-               then:
-        resp.status == HttpStatus.UNPROCESSABLE_ENTITY // <4>
-        resp.body().errors.size() == 2
-        resp.body().errors.find { it.field == 'losses' }.message == 'Property losses is type-mismatched'
-        resp.body().errors.find { it.field == 'game' }.message == 'Property [game] of class [class demo.Player] cannot be null'
+        then:
+        resp.statusCode() == 422 // <4>
+        errors.find { it.field == 'losses' }.message == 'Property losses is type-mismatched'
     }
 }

@@ -1,15 +1,14 @@
 package demo
 
-import spock.lang.Specification
 import grails.testing.gorm.DomainUnitTest
 import grails.testing.web.controllers.ControllerUnitTest
+import spock.lang.Specification
 
-@SuppressWarnings(['MethodName', 'DuplicateListLiteral', 'DuplicateNumberLiteral', 'LineLength'])
 class PlayerControllerSpec extends Specification implements ControllerUnitTest<PlayerController>, DomainUnitTest<Player> {
 
-    def "test update"() {
+    def 'test update'() {
         when:
-        def  player = new Player(name: 'Sergio', game: 'XCOM: Enemy Unkown', region: 'Spain', wins: 3, losses: 2)
+        def player = new Player(name: 'Sergio', game: 'XCOM: Enemy Unkown', region: 'Spain', wins: 3, losses: 2)
         player.save()
         params.id = player.id
         params.name = 'Sergio del Amo'

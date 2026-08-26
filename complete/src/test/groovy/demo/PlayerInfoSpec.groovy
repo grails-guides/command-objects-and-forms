@@ -2,15 +2,14 @@ package demo
 
 import spock.lang.Specification
 
-@SuppressWarnings(['MethodName', 'DuplicateListLiteral'])
 class PlayerInfoSpec extends Specification {
 
-    def "test PlayerInfo.region can be null"() {
+    def 'test PlayerInfo.region can be null'() {
         expect:
         new PlayerInfo(region: null).validate(['region'])
     }
 
-    def "test PlayerInfo.name can be blank"() {
+    def 'test PlayerInfo.name cannot be blank'() {
         when:
         def playerInfo = new PlayerInfo(name: '')
 
@@ -26,7 +25,7 @@ class PlayerInfoSpec extends Specification {
         playerInfo.errors['name'].code == 'nullable'
     }
 
-    def "test PlayerInfo.game can be blank"() {
+    def 'test PlayerInfo.game cannot be blank'() {
         when:
         def playerInfo = new PlayerInfo(game: '')
 
