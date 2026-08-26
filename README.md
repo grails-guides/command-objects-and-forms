@@ -2,7 +2,7 @@
 
 Sample app for the apache/grails-static-website guide [command-objects-and-forms](https://grails.apache.org/guides/command-objects-and-forms/4/guide/index.html).
 
-This `grails8` branch is the Grails 8 companion for **Using Command Objects To Handle Form Data**: data binding, validation, and form handling with a `Player` domain and a `PlayerInfo` command object.
+This branch is the Grails 8 companion for **Using Command Objects To Handle Form Data**: data binding, validation, and form handling with a `Player` domain and a `PlayerInfo` command object.
 
 ## Layout
 

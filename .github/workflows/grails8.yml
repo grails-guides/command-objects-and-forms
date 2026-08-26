@@ -2,9 +2,9 @@ name: Grails 8 CI
 
 on:
   push:
-    branches: [ grails8 ]
+    branches: [ grails8, grails4 ]
   pull_request:
-    branches: [ grails8 ]
+    branches: [ grails8, grails4 ]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
