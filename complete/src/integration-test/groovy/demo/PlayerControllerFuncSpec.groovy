@@ -1,38 +1,93 @@
 package demo
 
-import grails.testing.spock.OnceBefore
-import io.micronaut.http.HttpRequest
-import io.micronaut.http.HttpResponse
-import io.micronaut.http.HttpStatus
-import io.micronaut.http.client.HttpClient
-import spock.lang.Specification
 import grails.testing.mixin.integration.Integration
+import groovy.json.JsonSlurper
+import spock.lang.Specification
 
-@SuppressWarnings(['LineLength', 'MethodName'])
+import java.net.http.HttpClient
+import java.net.http.HttpRequest
+import java.net.http.HttpResponse
+
 @Integration
 class PlayerControllerFuncSpec extends Specification {
 
-    @Shared
-    @AutoCleanup
-    HttpClient client
+    HttpClient client = HttpClient.newBuilder()
+            .followRedirects(HttpClient.Redirect.NEVER)
+            .build()
 
-    @OnceBefore
-    void init() {
-        String baseUrl = "http://localhost:$serverPort"
-        this.client  = HttpClient.create(baseUrl.toURL())
+    void 'test save validation'() {
+        given:
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:${serverPort}/player/save.json")) // <1>
+                .header('Accept', 'application/json') // <2>
+                .header('Content-Type', 'application/x-www-form-urlencoded') // <3>
+                .POST(HttpRequest.BodyPublishers.ofString('name=Bob+Smith&wins=42&losses=abc'))
+                .build()
+
+        when:
+        HttpResponse<String> resp = client.send(request, HttpResponse.BodyHandlers.ofString())
+        Map body = new JsonSlurper().parseText(resp.body()) as Map
+        List errors = body.errors as List
+
+        then:
+        resp.statusCode() == 422 // <4>
+        errors.find { it.field == 'losses' }.message == 'Property losses is type-mismatched'
     }
 
-    def 'test save validation'() {
-        when:
+    void 'test update ignores wins and losses'() {
+        when: 'a player is created with known wins and losses'
+        HttpResponse<String> createdResp = postForm('/player/save.json', 'name=Mass+Assignment&game=Chess&region=NORTH&wins=10&losses=5')
+        def id = idFrom(createdResp)
 
-        Map<String, Object> json = [name : 'Bob Smith',
-                                    wins : 42,
-                                    losses : 'abc']
-        HttpResponse<Map> resp = client.toBlocking().exchange(HttpRequest.POST("/player/save", json), Map)
-               then:
-        resp.status == HttpStatus.UNPROCESSABLE_ENTITY // <4>
-        resp.body().errors.size() == 2
-        resp.body().errors.find { it.field == 'losses' }.message == 'Property losses is type-mismatched'
-        resp.body().errors.find { it.field == 'game' }.message == 'Property [game] of class [class demo.Player] cannot be null'
+        then:
+        createdResp.statusCode() in [201, 302]
+        id != null
+
+        when: 'the saved player is fetched'
+        Map created = getJson("/player/show/${id}.json")
+
+        then:
+        created.wins == 10
+        created.losses == 5
+
+        when: 'a crafted request tries to change wins and losses'
+        HttpResponse<String> updateResp = postForm('/player/update.json', "id=${id}&name=Mass+Assignment&game=Go&region=EAST&wins=2&losses=194")
+        Map after = getJson("/player/show/${id}.json")
+
+        then: 'editable fields change, wins and losses do not'
+        updateResp.statusCode() in [200, 302]
+        after.name == 'Mass Assignment'
+        after.game == 'Go'
+        after.region == 'EAST'
+        after.wins == 10
+        after.losses == 5
+    }
+
+    private HttpResponse<String> postForm(String path, String body) {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:${serverPort}${path}"))
+                .header('Accept', 'application/json')
+                .header('Content-Type', 'application/x-www-form-urlencoded')
+                .POST(HttpRequest.BodyPublishers.ofString(body))
+                .build()
+        client.send(request, HttpResponse.BodyHandlers.ofString())
+    }
+
+    private Map getJson(String path) {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:${serverPort}${path}"))
+                .header('Accept', 'application/json')
+                .GET()
+                .build()
+        HttpResponse<String> resp = client.send(request, HttpResponse.BodyHandlers.ofString())
+        assert resp.statusCode() == 200
+        new JsonSlurper().parseText(resp.body()) as Map
+    }
+
+    private static Serializable idFrom(HttpResponse<String> resp) {
+        if (resp.statusCode() == 201 && resp.body()) {
+            return new JsonSlurper().parseText(resp.body()).id
+        }
+        resp.headers().firstValue('Location').orElse(null)?.split('/')?.last()
     }
 }

@@ -18,7 +18,6 @@ class PlayerController {
     // end::indexShow[]
 
     //tag::create[]
-    @SuppressWarnings(['FactoryMethodName', 'GrailsMassAssignment'])
     def create() {
         respond new Player(params)
     }

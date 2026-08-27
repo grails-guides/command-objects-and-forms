@@ -1,11 +1,34 @@
-# Using Command Objects To Handle Form Data
+# command-objects-and-forms
 
-This repository contains the worked sample app for the [Using Command Objects To Handle Form Data](https://grails.apache.org/guides/command-objects-and-forms/4/guide/index.html) guide on the Apache Grails site.
+Sample app for the apache/grails-static-website guide [command-objects-and-forms](https://grails.apache.org/guides/command-objects-and-forms/8/guide/index.html) (Grails 4 edition: [v4](https://grails.apache.org/guides/command-objects-and-forms/4/guide/index.html)).
 
-## Run the example
+This branch is the Grails 8 companion for **Using Command Objects To Handle Form Data**: data binding, validation, and form handling with a `Player` domain and a `PlayerInfo` command object.
 
-`./gradlew bootRun`
+## Layout
 
-## Maintained at apache/grails-static-website
+| Directory | What it is |
+|---|---|
+| [`initial/`](initial/) | Grails 8 web starter (`web` profile, Hibernate, Tomcat, DevTools, H2) plus the `Player` domain, scaffold views, and sample data. No `PlayerController` yet — that is what the guide walks through. |
+| [`complete/`](complete/) | The same starter with `PlayerController`, the `PlayerInfo` command object, unit tests, and functional tests for save validation and mass-assignment protection. |
 
-The guide narrative is maintained at https://github.com/apache/grails-static-website. Changes to the guide content go there; this repo holds the worked sample app only.
+## Running
+
+Requires JDK 21+.
+
+```bash
+cd complete
+./gradlew bootRun
+```
+
+Then browse to http://localhost:8080/player
+
+## Branches
+
+| Branch | Grails version |
+|---|---|
+| `grails8` | Apache Grails 8.0.0-M5 |
+| `grails4` | Apache Grails 4 (published guide) |
+
+## License
+
+Apache License 2.0. See [LICENSE](LICENSE).
